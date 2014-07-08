@@ -42,11 +42,20 @@
 
 	}
 
+	// Set ten minute interval for cron
+	function fgram_set_interval( $schedules ) {
+		$schedules['ten_minutes'] = array(
+			'interval' => 600,
+			'display' => __('Every ten minutes')
+		);
+		return $schedules;
+	}
+	add_filter( 'cron_schedules', 'fgram_set_interval' );
 
 	// If auto is set, schedule hourly cron
 	if ( get_option('fgram_auto') ) {
 		if ( ! wp_next_scheduled( 'fgram_cron' ) ) {
-			wp_schedule_event( time(), 'hourly', 'fgram_cron' );
+			wp_schedule_event( time(), 'ten_minutes', 'fgram_cron' );
 		}
 
 	// If auto is not set, clear cron
