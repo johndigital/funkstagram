@@ -12,6 +12,8 @@
 		/* 
 		 * Helper function used to gather instagram user IDs
 		 * @Returns array of user IDs to get photos from, or false if no IDs
+		 *
+		 * @Todo once user ID is fetched through api, cache as an option to save calls
 		 */
 			private function get_user_ids() {
 
@@ -95,7 +97,7 @@
 			}
 
 		/* 
-		 * Helper function used to gather posts by id
+		 * Helper function used to gather posts through API by id
 		 * @Param ARRAY: array of user IDs to fetch posts for
 		 * @Returns date-sorted object of all posts from all users
 		 */
@@ -147,7 +149,7 @@
 			}
 
 		/* 
-		 * Helper function used to gather posts by tag
+		 * Helper function used to gather posts through API by tag
 		 * $Param ARRAY: set of tags to get posts for
 		 * @Returns date-sorted object of all posts from all users
 		 */
@@ -330,6 +332,7 @@
 				} //End loop
 
 				// Output any/all errors logged along the way
+				// @Todo fix this formatting hack
 				$total_errors = count($this->error_log);
 				$output = '<br><br><strong>' . $total_errors . ' errors returned:<br>';
 				$output .= $uploadCount . ' new images found and uploaded</strong><br><br>';
