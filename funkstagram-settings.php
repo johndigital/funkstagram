@@ -79,15 +79,6 @@
 								<p class="description">If left empty, all posts for specified users will be imported</p>
 							</td>
 						</tr>
-<!--
-						<tr valign="top">
-							<th scope="row"><label>CRON URL:</label></th>
-							<td>
-								<code id="fgram_cron"><?php echo site_url('/wp-admin/admin-ajax.php?action=funkstagram_import'); ?></code>
-								<p class="description">Run this URL in a CRON job to import automatically</p>
-							</td>
-						</tr>
--->
 					</tbody>
 				</table>
 				<p class="submit">
