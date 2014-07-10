@@ -49,7 +49,7 @@ Funkstagram is a simple Wordpress plugin used to import photo feeds from Instagr
 Using the image status feature, all images will be given a custom status, defaulting to 'draft'. The status of each image can be changed in the media library, or from
 within an `Insert Media` popup page. In this way images can be approved before they show on the front of the site, but first a loop needs to be set up that queries
 for published posts only. This can be acheived by using the `fgram_status` meta key. An example loop might look like the one below:
-```
+```php
 $args = array(
     "posts_per_page" => -1,
     "meta_key" => "fgram_status",
