@@ -1,5 +1,5 @@
 ```
-Funkstagram: A plugin by Funkhaus
+Funkstagram: A Wordpress plugin by Funkhaus
       ___ _   _ _  _ _  __
      | __| | | | \| | |/ /
      | _|| |_| | .` | ' <
@@ -12,7 +12,8 @@ Funkstagram: A plugin by Funkhaus
 
 ### Summary:
 
-Funkstagram is a simple Wordpress plugin used to import photo feeds from Instagram.
+Funkstagram is a simple Instagram image importer for Wordpress. Pick users and/or
+tags and automatically load them into the Wordpress media library.
 
 ### Features:
 
