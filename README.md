@@ -33,8 +33,12 @@ Funkstagram is a simple Wordpress plugin used to import photo feeds from Instagr
 3. Navigate to settings page at `Tools > Funkstagram`
 4. Put in Instagram API key. If you don't have one, register a new client at: http://instagram.com/developer/register/
 5. Select a page from the drop-down to attach all imported images from. If no page selected, photos will go straight to media library with no parent
+<<<<<<< HEAD
 6. If you plan to use the image status feature, set a default status for the images to import as.
 ```Note: This won't change anything unless your theme is setup to use this feature. The status feature is particularly useful when you don't have full control over what images are being imported (i.e. importing all images tagged `#awesome`.) Status gives you an extra layer so images can be approved in the back end before showing up on the front.```
+=======
+6. If you plan to use the image status feature, set a default status for the images to import as. > Note: This won't change anything unless your theme is setup to use this feature. The status feature is particularly useful when you don't have full control over what images are being imported (i.e. importing all images tagged `#awesome`.) Status gives you an extra layer so images can be approved in the back end before showing up on the front.
+>>>>>>> FETCH_HEAD
 7. If importing by user, add usernames **or** user IDs into `Users to import` fields.
 8. Enter any tags into `Filter by tags` field. If importing by user, only images with these tags from those particular users will be imported. If no users are specified, all images posted to Instagram with those particular tags will be imported.
 > **Note:** If importing by tag only and the tag is not specific enough, you will end up with a lot of images being imported
