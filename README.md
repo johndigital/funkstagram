@@ -32,13 +32,13 @@ tags and automatically load images into the Wordpress media library.
 4. Put in Instagram API key. If you don't have one, register a new client at: http://instagram.com/developer/register/
 5. Select a page from the drop-down to attach all imported images to. If no page selected, photos will go straight to the media library with no parent
 6. If you plan to use the image status feature, set a default status for the images to import as.</br>
-  _**Note:** This won't change anything unless your theme is setup to use this feature. The status feature is particularly useful when you don't have full control over what images are being imported (i.e. importing all images tagged `#awesome`.) Status gives you an extra layer so images can be approved in the backend before showing up on the front._
+  * _**Note:** This won't change anything unless your theme is setup to use this feature. The status feature is particularly useful when you don't have full control over what images are being imported (i.e. importing all images tagged `#awesome`.) Status gives you an extra layer so images can be approved in the backend before showing up on the front._
 7. If importing by user, add usernames **or** user IDs into `Users to import` fields.
 8. Enter any tags into `Filter by tags` field. If importing by user, only images with these tags from those particular users will be imported. If no users are specified, all images posted to Instagram with those particular tags will be imported. </br>
-  _**Note:** If importing by tag only and the tag is not specific enough, you will end up with a lot of images being imported_
+  * _**Note:** If importing by tag only and the tag is not specific enough, you will end up with a lot of images being imported_
 9. Click save changes and then click the `Import Now` button to test importing. This may take a while if importing a large number of photos.
 10. When Import Now finishes, a log will appear at the bottom of the page. If 0 errors were returned, and images were successfully imported then check the `enable auto-import` box at the top of the screen and save changes. Images will now be imported automatically. </br>
-  _**Developer Note:** If you would rather use a UNIX Cron to run the import rather than a Wordpress cron, use this URL format: `http://example.com/wp-admin/admin-ajax.php?action=funkstagram_import`_
+  * _**Developer Note:** If you would rather use a UNIX Cron to run the import rather than a Wordpress cron, use this URL format: `http://example.com/wp-admin/admin-ajax.php?action=funkstagram_import`_
 
 ### Using statuses in your theme:
 
