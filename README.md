@@ -13,7 +13,7 @@ Funkstagram: A Wordpress plugin by Funkhaus
 ### Summary:
 
 Funkstagram is a simple Instagram image importer for Wordpress. Pick users and/or
-tags and automatically load them into the Wordpress media library.
+tags and automatically load images into the Wordpress media library.
 
 ### Features:
 
