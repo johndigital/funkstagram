@@ -1,5 +1,5 @@
 <pre style="padding: 20px;">
-Image status is saved for each attachment as the meta value "fgram_status" and has three possible values:
+Image status is saved for each attachment as the meta key "fgram_status" and has three possible values:
 	1. "draft"
 	2. "pending_review"
 	3. "published"
