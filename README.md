@@ -33,8 +33,8 @@ tags and automatically load images into the Wordpress media library.
 5. Select a page from the drop-down to attach all imported images to. If no page selected, photos will go straight to the media library with no parent
 6. If you plan to use the image status feature, set a default status for the images to import as.</br>
   * _**Note:** This won't change anything unless your theme is setup to use this feature. The status feature is particularly useful when you don't have full control over what images are being imported (i.e. importing all images tagged `#awesome`.) Status gives you an extra layer so images can be approved in the backend before showing up on the front._
-7. If importing by user, add usernames **or** user IDs into `Users to import` fields.
-8. Enter any tags into `Filter by tags` field. If importing by user, only images with these tags from those particular users will be imported. If no users are specified, all images posted to Instagram with those particular tags will be imported. </br>
+7. If importing by user, add usernames **or** user IDs into the `Users to import` field.
+8. Enter any tags into the `Filter by tags` field. If importing by user, only images with these tags from those particular users will be imported. If no users are specified, all images posted to Instagram with those particular tags will be imported. </br>
   * _**Note:** If importing by tag only and the tag is not specific enough, you will end up with a lot of images being imported_
 9. Click save changes and then click the `Import Now` button to test importing. This may take a while if importing a large number of photos.
 10. When Import Now finishes, a log will appear at the bottom of the page. If 0 errors were returned, and images were successfully imported then check the `enable auto-import` box at the top of the screen and save changes. Images will now be imported automatically. </br>
@@ -44,14 +44,13 @@ tags and automatically load images into the Wordpress media library.
 
 Using the image status feature, all images will be given a custom status, defaulting to 'draft'. The status of each image can be changed in the media library, or from
 within an `Insert Media` popup page. In this way images can be approved before they show on the front of the site, but first a loop needs to be set up that queries
-for published posts only. This can be acheived by using the `fgram_status` meta key. An example loop might look like the one below:
+for published images only. This can be acheived by using the `fgram_status` meta key. An example loop might look like the one below:
 ```php
 $args = array(
     "posts_per_page" => -1,
     "meta_key" => "fgram_status",
     "meta_value" => "published",
-    "post_type" => "attachment",
-    "post_parent" => $post->ID
+    "post_type" => "attachment"
 );
 $images = get_posts($args);
 ```
