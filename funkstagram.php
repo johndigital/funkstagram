@@ -12,9 +12,11 @@
  * 
  */
 
+ 	// get funkstagram core and settings
 	require_once('funkstagram-class.php');
 	require_once('funkstagram-settings.php');
 
+	// add metadata to attachments
 	require_once('funkstagram-meta.php');
 
 	function funkstagram_import() {

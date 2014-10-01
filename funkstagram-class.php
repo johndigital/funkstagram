@@ -212,6 +212,12 @@
 		 */
 			private function sideLoad($url) {
 
+				if ( ! function_exists('download_url') ) {
+					require_once('wp-admin/includes/image.php');
+					require_once('wp-admin/includes/file.php');
+					require_once('wp-admin/includes/media.php');
+				}
+
 				//download image from url
 				$tmp = download_url( $url );
 
@@ -238,7 +244,6 @@
 				}
 
 				return $id;
-
 			}
 
 		/*
@@ -313,7 +318,9 @@
 
 						// Add instagram ID, video URl, and user name meta fields
 						add_post_meta($attachment_id, 'instagram_id', $gram_post["id"]);
-						add_post_meta($attachment_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
+						if ( isset( $gram_post["videos"] ) ) {
+							add_post_meta($attachment_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
+						}
 						add_post_meta($attachment_id, 'instagram_user', $gram_post["user"]["full_name"]);
 
 						// Load attachment by ID and set caption
