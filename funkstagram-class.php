@@ -48,13 +48,13 @@
 						// Otherwise remove from array and log
 						} else {
 							unset( $user_ids[$i] );
-							$this->error_log[] = 'User ' . $user . 'does not exist';
+							$this->error_log[] = 'User ' . $user . ' does not exist';
 						}
 
 					// No response, remove from array and log
 					} else {
 						unset( $user_ids[$i] );
-						$this->error_log[] = 'User ' . $user . 'does not exist';
+						$this->error_log[] = 'User ' . $user . ' does not exist';
 					}
 
 				}
