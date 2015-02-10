@@ -47,10 +47,13 @@ within an `Insert Media` popup page. In this way images can be approved before t
 for published images only. This can be acheived by using the `fgram_status` meta key. An example loop might look like the one below:
 ```php
 $args = array(
-    "posts_per_page" => -1,
-    "meta_key" => "fgram_status",
-    "meta_value" => "published",
-    "post_type" => "attachment"
+	'post_parent'		=> $post->ID,					
+	'post_type'       	=> 'attachment',
+	'post_mime_type'  	=> 'image',
+	'posts_per_page' 	=> -1,
+	'meta_key' 			=> 'fgram_status',
+	'meta_value' 		=> 'published',
+	'post_type' 		=> 'attachment'
 );
 $images = get_posts($args);
 ```
