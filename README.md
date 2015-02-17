@@ -38,7 +38,10 @@ tags and automatically load images into the Wordpress media library.
   * _**Note:** If importing by tag only and the tag is not specific enough, you will end up with a lot of images being imported_
 9. Click save changes and then click the `Import Now` button to test importing. This may take a while if importing a large number of photos.
 10. When Import Now finishes, a log will appear at the bottom of the page. If 0 errors were returned, and images were successfully imported then check the `enable auto-import` box at the top of the screen and save changes. Images will now be imported automatically. </br>
-  * _**Developer Note:** If you would rather use a UNIX Cron to run the import rather than a Wordpress cron, use this URL format: `http://example.com/wp-admin/admin-ajax.php?action=funkstagram_import`_
+  * _**Note:** If you would rather use a UNIX Cron to run the import rather than a Wordpress cron, use this URL format: `http://example.com/wp-admin/admin-ajax.php?action=funkstagram_import`_
+
+### Videos:
+When Funkstagram encounters a video post, it will automatically import the thumbnail of the video into the media library just as it does with all photo posts. For videos however it will also assign metadata to the attachment with the key `instagram_video_url` and the value will be the URL of the video as hosted on instagram's servers. If you'd like to support video playback on the front-end of your site, just check for any `instagram_video_url` values while you're looping through the imported images and use the URL to provide playback in whatever way you prefer.
 
 ### Using statuses in your theme:
 
