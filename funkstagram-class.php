@@ -322,7 +322,7 @@
 							add_post_meta($attachment_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
 						}
 						add_post_meta($attachment_id, 'instagram_user', $gram_post["user"]["full_name"]);
-						add_post_meta($attachment_id, 'instagram_alldata', $gram_post);
+						add_post_meta($attachment_id, 'instagram_alldata', base64_encode(serialize($gram_post)), true);
 
 						// Load attachment by ID and set caption
 						$this_attachment = get_post($attachment_id);
