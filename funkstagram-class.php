@@ -41,15 +41,24 @@
 						// Decode JSON response
 						$response = json_decode( wp_remote_retrieve_body( $serach_user ), true );
 
-						// If username matches, switch username to be id instead
-						if ( $response['data'][0]['username'] == $user ) {
-							$user_ids[$i] = $response['data'][0]['id'];
+                        			// Go through serach results and find matching username
+                        			$found_id = false;
+                        			foreach($response['data'] as $key => $found_user) {
+                            				if(strtolower($found_user['username']) == strtolower($user)) {
+                                				$found_id = $response['data'][$key]['id'];
+                                				break;
+                            				}
+                        			}
 
-						// Otherwise remove from array and log
-						} else {
-							unset( $user_ids[$i] );
-							$this->error_log[] = 'User ' . $user . ' does not exist';
-						}
+                        			// If username matches, switch username to be id instead
+                        			if ( $found_id ) {
+                            				$user_ids[$i] = $found_id;
+
+                        			// Otherwise remove from array and log
+                        			} else {
+                            				unset( $user_ids[$i] );
+                            				$this->error_log[] = 'User ' . $user . ' does not exist';
+                        			}
 
 					// No response, remove from array and log
 					} else {
