@@ -20,9 +20,21 @@
     /* Call Settings Page */
     function funkstagram_settings_page() {
 
+        if ( isset($_REQUEST['deauth']) ){
+
+            // check nonce
+            check_admin_referer('fgram_deauth');
+
+            // remove saved options
+            delete_option('fgram_ig_token');
+            delete_option('fgram_ig_userdata');
+
+        }
+
         $params = array(
             'client_id'     => get_option('fgram_api_key'),
             'redirect_uri'  => site_url('/wp-admin/admin-ajax.php?action=funkstagram_ig_redirect'),
+            'scope'         => 'public_content',
             'response_type' => 'code'
         );
         $auth_url = 'https://api.instagram.com/oauth/authorize/?' . http_build_query($params);
@@ -59,16 +71,21 @@
                             <th scope="row"><label for="fgram_api_key">Authenticate Account:</label></th>
                             <td>
                                 <?php if ( get_option('fgram_ig_token') && get_option('fgram_ig_userdata') ): ?>
-                                    <?php $user = get_option('fgram_ig_userdata'); ?>
+                                    <?php
+                                        $user = get_option('fgram_ig_userdata');
+
+                                        $bare_url = site_url('/wp-admin/tools.php?page=funkstagram_settings') . '&deauth';
+                                        $complete_url = wp_nonce_url( $bare_url, 'fgram_deauth' );
+                                    ?>
 
                                     <p>Authenticated as <strong><?php echo $user['full_name']; ?></strong></p>
-                                    <a href="#" class="trash">Deauthenticate</a>
+                                    <a href="<?php echo $complete_url; ?>" class="trash">Deauthenticate</a>
 
-                                <?php elseif ( !empty(get_option('fgram_api_key')) ): ?>
+                                <?php elseif ( !empty(get_option('fgram_api_key')) && !empty(get_option('fgram_api_secret')) ): ?>
                                     <a href="<?php echo $auth_url; ?>" class="button">Authenticate</a>
 
                                 <?php else: ?>
-                                    <p class="description">You must first set a client ID</p>
+                                    <p class="description">You must first set a client ID and secret</p>
 
                                 <?php endif; ?>
                             </td>
