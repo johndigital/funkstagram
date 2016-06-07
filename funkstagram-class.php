@@ -35,8 +35,6 @@
 					// ID failed, search api for this user by name
 					$serach_user = wp_remote_get('https://api.instagram.com/v1/users/search?q=' . $user . '&access_token=' . $this->access_token );
 
-                    print_r('https://api.instagram.com/v1/users/search?q=' . $user . '&access_token=' . $this->access_token); exit;
-
 					// If user search is successful...
 					if ( wp_remote_retrieve_response_code( $serach_user ) == 200 ) {
 
