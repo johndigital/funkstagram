@@ -1,15 +1,15 @@
-<?php 
+<?php
 
 	class Funkstagram {
 
-		public $api_key;
+		public $access_token;
 		public $page_id;
 		public $user_ids;
 		public $tags;
 
 		private $error_log;
 
-		/* 
+		/*
 		 * Helper function used to gather instagram user IDs
 		 * @Returns array of user IDs to get photos from, or false if no IDs
 		 *
@@ -27,13 +27,13 @@
 				foreach ( $user_ids as $i => $user ) {
 
 					// Call api for this user
-					$check_id = wp_remote_retrieve_response_code( wp_remote_get('https://api.instagram.com/v1/users/' . $user . '/?client_id=' . $this->api_key ) );
+					$check_id = wp_remote_retrieve_response_code( wp_remote_get('https://api.instagram.com/v1/users/' . $user . '/?access_token=' . $this->access_token ) );
 
 					// if successful, do not change array value
 					if ( $check_id == 200 ) continue;
 
 					// ID failed, search api for this user by name
-					$serach_user = wp_remote_get('https://api.instagram.com/v1/users/search?q=' . $user . '&client_id=' . $this->api_key );
+					$serach_user = wp_remote_get('https://api.instagram.com/v1/users/search?q=' . $user . '&access_token=' . $this->access_token );
 
 					// If user search is successful...
 					if ( wp_remote_retrieve_response_code( $serach_user ) == 200 ) {
@@ -73,7 +73,7 @@
 
 			}
 
-		/* 
+		/*
 		 * Helper function used to gather instagram posts
 		 * @Returns date-sorted object of all posts from all users
 		 */
@@ -82,8 +82,8 @@
 				$user_ids = $this->get_user_ids();
 
 				// Check for API key and log error accordingly
-				if ( empty($this->api_key) ) {
-					$this->error_log[] = 'No API key is set';
+				if ( empty($this->access_token) ) {
+					$this->error_log[] = 'No access token is set';
 				}
 
 				// Set post container
@@ -105,7 +105,7 @@
 
 			}
 
-		/* 
+		/*
 		 * Helper function used to gather posts through API by id
 		 * @Param ARRAY: array of user IDs to fetch posts for
 		 * @Returns date-sorted object of all posts from all users
@@ -119,7 +119,7 @@
 				foreach ( $user_ids as $user_id ) {
 
 					// Pull json from api and decode
-					$url = 'https://api.instagram.com/v1/users/' . $user_id . '/media/recent/?client_id=' . $this->api_key;
+					$url = 'https://api.instagram.com/v1/users/' . $user_id . '/media/recent/?access_token=' . $this->access_token;
 
 					// Get contents of URL and if successful...
 					$response = wp_remote_retrieve_body( wp_remote_get($url) );
@@ -133,10 +133,10 @@
 						if ( is_array($response["data"]) ) {
 
 							foreach ($response["data"] as $single_post) {
-	
+
 								// Push each post into all_posts array
 								array_push($output, $single_post);
-	
+
 							}
 
 						} else {
@@ -157,7 +157,7 @@
 
 			}
 
-		/* 
+		/*
 		 * Helper function used to gather posts through API by tag
 		 * $Param ARRAY: set of tags to get posts for
 		 * @Returns date-sorted object of all posts from all users
@@ -172,7 +172,7 @@
 				foreach ( $tags as $tag ) {
 
 					// Pull json from api and decode
-					$url = 'https://api.instagram.com/v1/tags/' . $tag . '/media/recent?client_id=' . $this->api_key;
+					$url = 'https://api.instagram.com/v1/tags/' . $tag . '/media/recent?access_token=' . $this->access_token;
 
 					// Get contents of URL and if successful...
 					$response = wp_remote_retrieve_body( wp_remote_get($url) );
@@ -186,10 +186,10 @@
 						if ( is_array($response["data"]) ) {
 
 							foreach ($response["data"] as $single_post) {
-	
+
 								// Push each post into all_posts array
 								array_push($output, $single_post);
-	
+
 							}
 
 						} else {
@@ -210,10 +210,10 @@
 
 			}
 
-		/* 
+		/*
 		 * The following code has been taken from
-		 * the media_handle_sideload() reference page 
-		 * http://codex.wordpress.org/Function_Reference/media_handle_sideload 
+		 * the media_handle_sideload() reference page
+		 * http://codex.wordpress.org/Function_Reference/media_handle_sideload
 		 *
 		 * Sets URL into a useable $_FILE array, and attaches it to page
 		 * @Returns image ID on success, or false on failure

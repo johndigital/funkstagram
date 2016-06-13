@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	/*
 	 * admin Scripts and styles for plugin
@@ -17,8 +17,29 @@
 	add_action( 'admin_init', 'funkstagram_admin_style' );
 
 
-	/* Call Settings Page */
-	function funkstagram_settings_page() { ?>
+    /* Call Settings Page */
+    function funkstagram_settings_page() {
+
+        if ( isset($_REQUEST['deauth']) ){
+
+            // check nonce
+            check_admin_referer('fgram_deauth');
+
+            // remove saved options
+            delete_option('fgram_ig_token');
+            delete_option('fgram_ig_userdata');
+
+        }
+
+        $params = array(
+            'client_id'     => get_option('fgram_api_key'),
+            'redirect_uri'  => site_url('/wp-admin/admin-ajax.php?action=funkstagram_ig_redirect'),
+            'scope'         => 'public_content',
+            'response_type' => 'code'
+        );
+        $auth_url = 'https://api.instagram.com/oauth/authorize/?' . http_build_query($params);
+
+    ?>
 
 		<div class="wrap">
 			<h2>Funkstagram Options</h2>
@@ -30,20 +51,55 @@
 							<th scope="row"><label>Enable auto-import:</label></th>
 							<td>
 								<input name="fgram_auto" type="checkbox" id="fgram_auto" <?php checked( get_option('fgram_auto') ); ?>  value="1">
-								<p class="description">If enabled, it will import every 10 minutes.</p>																
+								<p class="description">If enabled, it will import every 10 minutes.</p>
 							</td>
 						</tr>
 						<tr valign="top">
-							<th scope="row"><label for="fgram_api_key">API Key (Client ID):</label></th>
+							<th scope="row"><label for="fgram_api_key">Client ID:</label></th>
 							<td>
 								<input name="fgram_api_key" type="text" title="Client ID" id="fgram_api_key" value="<?php echo get_option('fgram_api_key'); ?>">
 								<p class="description">http://instagram.com/developer/register/</p>
+							</td>
+                        </tr>
+						<tr valign="top">
+							<th scope="row"><label for="fgram_api_secret">Client Secret:</label></th>
+							<td>
+								<input name="fgram_api_secret" type="text" title="Client Secret" id="fgram_api_secret" value="<?php echo get_option('fgram_api_secret'); ?>">
+							</td>
+                        </tr>
+                        <tr valign="top">
+                            <th scope="row"><label for="fgram_api_key">Authenticate Account:</label></th>
+                            <td>
+                                <?php if ( get_option('fgram_ig_token') && get_option('fgram_ig_userdata') ): ?>
+                                    <?php
+                                        $user = get_option('fgram_ig_userdata');
+
+                                        $bare_url = site_url('/wp-admin/tools.php?page=funkstagram_settings') . '&deauth';
+                                        $complete_url = wp_nonce_url( $bare_url, 'fgram_deauth' );
+                                    ?>
+
+                                    <p>Authenticated as <strong><?php echo $user['full_name']; ?></strong></p>
+                                    <a href="<?php echo $complete_url; ?>" class="trash">Deauthenticate</a>
+
+                                <?php elseif ( !empty(get_option('fgram_api_key')) && !empty(get_option('fgram_api_secret')) ): ?>
+                                    <a href="<?php echo $auth_url; ?>" class="button">Authenticate</a>
+
+                                <?php else: ?>
+                                    <p class="description">You must first set a client ID and secret</p>
+
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+						<tr valign="top">
+							<th scope="row"><label for="fgram_tag_list">Redirect URL:</label></th>
+							<td>
+                                <code><?php echo site_url('/wp-admin/admin-ajax.php?action=funkstagram_ig_redirect'); ?></code>
 							</td>
 						</tr>
 						<tr valign="top">
 							<th scope="row"><label for="fgram_att_page">Page to attach to:</label></th>
 							<td>
-								<?php 
+								<?php
 								$args = array(
 								    'id'            	=> 'fgram_att_page',
 								    'name'          	=> 'fgram_att_page',
@@ -95,6 +151,7 @@
 	/* Save Takeover Settings */
 	function funkstagram_settings_init(){
 		register_setting('funkstagram_settings', 'fgram_api_key');
+		register_setting('funkstagram_settings', 'fgram_api_secret');
 		register_setting('funkstagram_settings', 'fgram_att_page');
 		register_setting('funkstagram_settings', 'fgram_default_status');
 		register_setting('funkstagram_settings', 'fgram_user_list');
