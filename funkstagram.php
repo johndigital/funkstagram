@@ -26,7 +26,7 @@
 	// ------------Settings-----------//
 
 		// STRING: Client api key
-		$importer->api_key = esc_attr(get_option('fgram_api_key'));
+		$importer->access_token = esc_attr(get_option('fgram_ig_token'));
 
 		// INTEGER: ID of page to upload to
 		$importer->page_id = '';
