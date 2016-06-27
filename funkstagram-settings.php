@@ -40,6 +40,8 @@
 								<p class="description">http://instagram.com/developer/register/</p>
 							</td>
 						</tr>
+                        
+                        <!--
 						<tr valign="top">
 							<th scope="row"><label for="fgram_att_page">Page to attach to:</label></th>
 							<td>
@@ -55,8 +57,10 @@
 								<p class="description">All images will be attached to this page</p>
 							</td>
 						</tr>
+                        -->
+
 						<tr valign="top">
-							<th scope="row"><label for="fgram_default_status">Image default status:</label></th>
+							<th scope="row"><label for="fgram_default_status">Default status:</label></th>
 							<td>
 								<?php $selected = get_option('fgram_default_status'); ?>
 								<select name="fgram_default_status" id="fgram_default_status">

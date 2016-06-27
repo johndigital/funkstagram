@@ -37,7 +37,7 @@ function funkstagram_att_meta($form_fields, $post) {
     );
     return $form_fields;
 }
-add_filter("attachment_fields_to_edit", "funkstagram_att_meta", null, 2);
+//add_filter("attachment_fields_to_edit", "funkstagram_att_meta", null, 2);
 
 /* Save custom field value */
 function funkstagram_save_att_meta($post, $attachment) {
@@ -49,4 +49,4 @@ function funkstagram_save_att_meta($post, $attachment) {
     }
     return $post;
 }
-add_filter("attachment_fields_to_save", "funkstagram_save_att_meta", null , 2);
+//add_filter("attachment_fields_to_save", "funkstagram_save_att_meta", null , 2);

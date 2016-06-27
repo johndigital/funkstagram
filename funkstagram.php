@@ -6,7 +6,7 @@
  *	Plugin URI: http://funkhaus.us
  *	Description: A simple Instagram image importer
  *	Author: Funkhaus
- *	Version: 1.3
+ *	Version: 1.3 Custom
  *	Author URI: http://Funkhaus.us
  *	Requires at least: 3.8
  * 
@@ -29,7 +29,7 @@
 		$importer->api_key = esc_attr(get_option('fgram_api_key'));
 
 		// INTEGER: ID of page to upload to
-		$importer->page_id = esc_attr(get_option('fgram_att_page'));
+		$importer->page_id = '';
 
 		// STRING: Comma separated list of Instagram IDs
 		$importer->user_ids = esc_attr(get_option('fgram_user_list'));

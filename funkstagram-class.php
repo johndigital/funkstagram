@@ -40,25 +40,26 @@
 
 						// Decode JSON response
 						$response = json_decode( wp_remote_retrieve_body( $serach_user ), true );
+						
+						// Go through serach results and find matching username
+						$found_id = false;
+                        foreach($response['data'] as $key => $found_user) {
+                            if(strtolower($found_user['username']) == strtolower($user)) {
+                                $found_id = $response['data'][$key]['id'];
+                                break;
+                            }
+                        }
 
-                        			// Go through serach results and find matching username
-                        			$found_id = false;
-                        			foreach($response['data'] as $key => $found_user) {
-                            				if(strtolower($found_user['username']) == strtolower($user)) {
-                                				$found_id = $response['data'][$key]['id'];
-                                				break;
-                            				}
-                        			}
+						// If username matches, switch username to be id instead
+						if ( $found_id ) {
+							$user_ids[$i] = $found_id;
 
-                        			// If username matches, switch username to be id instead
-                        			if ( $found_id ) {
-                            				$user_ids[$i] = $found_id;
+						// Otherwise remove from array and log
+						} else {
+							unset( $user_ids[$i] );
+							$this->error_log[] = 'User ' . $user . ' does not exist';
+						}
 
-                        			// Otherwise remove from array and log
-                        			} else {
-                            				unset( $user_ids[$i] );
-                            				$this->error_log[] = 'User ' . $user . ' does not exist';
-                        			}
 
 					// No response, remove from array and log
 					} else {
@@ -259,13 +260,9 @@
 		 * Main function used to import feeds and attach them to page
 		 */
 			public function import() {
-
+                
 				// Get all gathered posts
 				$gram_posts = $this->gatherObjects();
-
-				if ( empty($this->page_id) ) {
-					$this->error_log[] = 'No attachment page is set';
-				}
 
 				$uploadCount = 0;
 				// Loop through each post
@@ -276,16 +273,18 @@
 						'posts_per_page'	=> 1,
 						'meta_key'			=> 'instagram_id',
 						'meta_value'		=> $gram_post["id"],
-						'post_type'			=> 'attachment'
+						'post_type'			=> 'post',
+						'fields'            => 'ids',
+						'post_status'       => 'any'
 					);
 					$existing_posts = get_posts($args);
 
 					// If any matching attachments are found,
 					// then skip this post, because it already exists
-					if ($existing_posts) {
+					if( !empty($existing_posts) ) {
 						continue;
 					}
-
+                    
 					// If any filter tags are set...
 					if ( $this->tags ) {
 
@@ -316,6 +315,18 @@
 
 					}
 
+                    // Create a post, then try to attach the image
+                    $new_post = array(
+                      'post_type'     => 'post',
+                      'post_title'    => '@ExposureAmerica',
+                      'post_status'   => get_option('fgram_default_status', 'draft'),
+                      'post_author'   => 1,
+                      'post_category' => array(4,15), // Add to News and @exposureamerica categories
+                      'post_content'  => $gram_post["caption"]["text"]
+                    );
+                    $post_id = wp_insert_post($new_post);
+                    $this->page_id = $post_id;
+
 					// Attempt to sideload (import) the image
 					$attachment_id = $this->sideLoad( $gram_post["images"]["standard_resolution"]["url"]);
 
@@ -325,23 +336,28 @@
 						// Increment counter
 						$uploadCount++;
 
-						// Add instagram ID, video URl, and user name meta fields
-						add_post_meta($attachment_id, 'instagram_id', $gram_post["id"]);
+                        // Add tags
+                        $tags = $gram_post["tags"];
+                        wp_set_post_tags($post_id, $tags);
+
+						// Add instagram ID, video URL, and user name meta fields
+						add_post_meta($post_id, 'instagram_id', $gram_post["id"]);
+						
 						if ( isset( $gram_post["videos"] ) ) {
-							add_post_meta($attachment_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
+							add_post_meta($post_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
 						}
-						add_post_meta($attachment_id, 'instagram_user', $gram_post["user"]["full_name"]);
-						add_post_meta($attachment_id, 'instagram_alldata', base64_encode(serialize($gram_post)), true);
-
-						// Load attachment by ID and set caption
-						$this_attachment = get_post($attachment_id);
-						$this_attachment->post_content = sanitize_text_field( $gram_post["caption"]["text"] ); // adjust this decode to handle emoticons
-						wp_update_post( $this_attachment );
-
+						add_post_meta($post_id, 'instagram_user', $gram_post["user"]["full_name"]);
+						add_post_meta($post_id, 'instagram_alldata', $gram_post, true);
+						add_post_meta($post_id, '_custom_link_url', $gram_post["link"]);
+                        
+                        // Set post thumbnail
+                        set_post_thumbnail( $post_id, $attachment_id );
+                        
 					} else {
 
 						// If sideload is unsuccessful, log it
-						$this->error_log[] = 'Image attachment was unsuccessful for image ID: ' . $gram_post["id"];
+						$this->error_log[] = 'Image attachment was unsuccessful for Instagram ID: ' . $gram_post["id"];
+						wp_delete_post( $post_id, true );
 						continue;
 
 					}
