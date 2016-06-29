@@ -40,7 +40,7 @@
 
 						// Decode JSON response
 						$response = json_decode( wp_remote_retrieve_body( $serach_user ), true );
-						
+
 						// Go through serach results and find matching username
 						$found_id = false;
                         foreach($response['data'] as $key => $found_user) {
@@ -260,7 +260,7 @@
 		 * Main function used to import feeds and attach them to page
 		 */
 			public function import() {
-                
+
 				// Get all gathered posts
 				$gram_posts = $this->gatherObjects();
 
@@ -284,7 +284,7 @@
 					if( !empty($existing_posts) ) {
 						continue;
 					}
-                    
+
 					// If any filter tags are set...
 					if ( $this->tags ) {
 
@@ -316,13 +316,14 @@
 					}
 
                     // Create a post, then try to attach the image
+                    $text = isset($gram_post["caption"]["text"]) ? $gram_post["caption"]["text"] : '';
                     $new_post = array(
                       'post_type'     => 'post',
                       'post_title'    => '@ExposureAmerica',
                       'post_status'   => get_option('fgram_default_status', 'draft'),
                       'post_author'   => 1,
                       'post_category' => array(4,15), // Add to News and @exposureamerica categories
-                      'post_content'  => $gram_post["caption"]["text"]
+                      'post_content'  => $text
                     );
                     $post_id = wp_insert_post($new_post);
                     $this->page_id = $post_id;
@@ -342,17 +343,17 @@
 
 						// Add instagram ID, video URL, and user name meta fields
 						add_post_meta($post_id, 'instagram_id', $gram_post["id"]);
-						
+
 						if ( isset( $gram_post["videos"] ) ) {
 							add_post_meta($post_id, 'instagram_video_url', $gram_post["videos"]["standard_resolution"]["url"]);
 						}
 						add_post_meta($post_id, 'instagram_user', $gram_post["user"]["full_name"]);
 						add_post_meta($post_id, 'instagram_alldata', $gram_post, true);
 						add_post_meta($post_id, '_custom_link_url', $gram_post["link"]);
-                        
+
                         // Set post thumbnail
                         set_post_thumbnail( $post_id, $attachment_id );
-                        
+
 					} else {
 
 						// If sideload is unsuccessful, log it
