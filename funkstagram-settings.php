@@ -70,6 +70,7 @@
                         <tr valign="top">
                             <th scope="row"><label for="fgram_api_key">Authenticate Account:</label></th>
                             <td>
+                                <?php $api_key = get_option('fgram_api_key'); $api_secret = get_option('fgram_api_secret'); ?>
                                 <?php if ( get_option('fgram_ig_token') && get_option('fgram_ig_userdata') ): ?>
                                     <?php
                                         $user = get_option('fgram_ig_userdata');
@@ -81,7 +82,7 @@
                                     <p>Authenticated as <strong><?php echo $user['full_name']; ?></strong></p>
                                     <a href="<?php echo $complete_url; ?>" class="trash">Deauthenticate</a>
 
-                                <?php elseif ( !empty(get_option('fgram_api_key')) && !empty(get_option('fgram_api_secret')) ): ?>
+                                <?php elseif ( !empty($api_key) && !empty($api_secret) ): ?>
                                     <a href="<?php echo $auth_url; ?>" class="button">Authenticate</a>
 
                                 <?php else: ?>
